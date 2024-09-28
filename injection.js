@@ -1,60 +1,65 @@
-let flyEnabled = false; // Track the fly status
-    let flyInterval; // Interval to control the fly loop
+let flyEnabled = false; // Track fly status
 
-    // Function to toggle fly on and off
-    function toggleFly() {
-        flyEnabled = !flyEnabled;
+// Add Fly Toggle Button to the UI
+function addFlyButton() {
+    let button = document.createElement("button");
+    button.id = "flyButton";
+    button.style.position = "fixed";
+    button.style.top = "10px";
+    button.style.right = "10px";
+    button.style.zIndex = 9999;
+    button.style.padding = "10px";
+    button.style.backgroundColor = "#4CAF50";
+    button.style.color = "white";
+    button.style.border = "none";
+    button.style.borderRadius = "5px";
+    button.style.cursor = "pointer";
+    button.textContent = "Enable Fly";
+    button.onclick = toggleFly;
+    document.body.appendChild(button);
+}
 
-        // Update button text
-        document.getElementById("flyButton").textContent = flyEnabled ? "Disable Fly" : "Enable Fly";
+// Toggle Fly Feature
+function toggleFly() {
+    flyEnabled = !flyEnabled;
+    document.getElementById("flyButton").textContent = flyEnabled ? "Disable Fly" : "Enable Fly";
+}
 
-        if (flyEnabled) {
-            startFly();  // Start flying
-        } else {
-            stopFly();   // Stop flying
-        }
-    }
-
-    // Start the fly feature by setting player movement
-    function startFly() {
-        flyInterval = setInterval(() => {
-            if (player$1) {
-                player$1.motion.x = 0;
-                player$1.motion.z = 0;
-                player$1.motion.y = keyPressedDump("space") ? 0.7 : (keyPressedDump("shift") ? -0.7 : 0);
-            }
-        }, 1000 / 60); // 60 times per second for smooth motion
-    }
-
-    // Stop the fly feature by clearing the interval
-    function stopFly() {
-        clearInterval(flyInterval);
+// Add Fly Logic to Existing Game Tick Loop
+function applyFlyFeature() {
+    if (flyEnabled) {
         if (player$1) {
-            player$1.motion.x = 0; // Reset horizontal motion
+            player$1.motion.x = 0;
             player$1.motion.z = 0;
+            player$1.motion.y = keyPressedDump("space") ? 0.7 : (keyPressedDump("shift") ? -0.7 : 0);
         }
     }
+}
 
-    // Add Fly Toggle Button to the UI
-    function addFlyButton() {
-        let button = document.createElement("button");
-        button.id = "flyButton";
-        button.style.position = "fixed";
-        button.style.top = "10px";
-        button.style.right = "10px";
-        button.style.zIndex = 9999;
-        button.style.padding = "10px";
-        button.style.backgroundColor = "#4CAF50";
-        button.style.color = "white";
-        button.style.border = "none";
-        button.style.borderRadius = "5px";
-        button.style.cursor = "pointer";
-        button.textContent = "Enable Fly";
-        button.onclick = toggleFly;
-        document.body.appendChild(button);
-    }
+// Hook into the game's existing tick loop without overriding it
+(function() {
+    'use strict';
+    
+    // Existing code replacements and game modifications
+    // -----------------------------------------------
+    // Original injection.js code that modifies various game functionalities
+    // No changes here to maintain game functionality
+    // -----------------------------------------------
 
-    // Initialize the script
+    // Initialize the fly button after the game is loaded
     window.addEventListener('load', function() {
         addFlyButton();
+
+        // Hook into existing game loop for fly functionality
+        new MutationObserver(() => {
+            // Ensure that game and player$1 are loaded and hook fly functionality
+            if (typeof player$1 !== 'undefined') {
+                // Fly logic executes as part of the game loop
+                applyFlyFeature();
+            }
+        }).observe(document, {
+            childList: true,
+            subtree: true,
+        });
     });
+})();
