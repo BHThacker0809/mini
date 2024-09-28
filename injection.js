@@ -14,7 +14,7 @@ function addFlyButton() {
     button.style.border = "none";
     button.style.borderRadius = "5px";
     button.style.cursor = "pointer";
-    button.textContent = "Enable Fly";
+    button.textContent = "Evnable Fly";
     button.onclick = toggleFly;
     document.body.appendChild(button);
 }
