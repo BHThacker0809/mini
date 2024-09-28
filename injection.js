@@ -22,7 +22,7 @@ function addFlyButton() {
 // Toggle Fly Feature
 function toggleFly() {
     flyEnabled = !flyEnabled;
-    document.getElementById("flyButton").textContent = flyEnabled ? "Disable Fly" : "Enable Fly";
+    document.getElementById("flyButton").textContent = flyEnabled ? "Disable Fly" : "Enabdle Fly";
 }
 
 // Add Fly Logic to Existing Game Tick Loop
