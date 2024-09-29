@@ -14,7 +14,7 @@ function addFlyButton() {
     button.style.border = "none";
     button.style.borderRadius = "5px";
     button.style.cursor = "pointer";
-    button.textContent = "Evnable Fly";
+    button.textContent = "Enables Fly";
     button.onclick = toggleFly;
     document.body.appendChild(button);
 }
@@ -22,7 +22,7 @@ function addFlyButton() {
 // Toggle Fly Feature
 function toggleFly() {
     flyEnabled = !flyEnabled;
-    document.getElementById("flyButton").textContent = flyEnabled ? "Disable Fly" : "Enabdle Fly";
+    document.getElementById("flyButton").textContent = flyEnabled ? "Disable Fly" : "Enables Fly";
 }
 
 // Add Fly Logic to Existing Game Tick Loop
@@ -40,26 +40,23 @@ function applyFlyFeature() {
 (function() {
     'use strict';
     
-    // Existing code replacements and game modifications
-    // -----------------------------------------------
-    // Original injection.js code that modifies various game functionalities
-    // No changes here to maintain game functionality
-    // -----------------------------------------------
+    // 5-second delay before executing the script
+    setTimeout(() => {
+        // Initialize the fly button after the game is loaded
+        window.addEventListener('load', function() {
+            addFlyButton();
 
-    // Initialize the fly button after the game is loaded
-    window.addEventListener('load', function() {
-        addFlyButton();
-
-        // Hook into existing game loop for fly functionality
-        new MutationObserver(() => {
-            // Ensure that game and player$1 are loaded and hook fly functionality
-            if (typeof player$1 !== 'undefined') {
-                // Fly logic executes as part of the game loop
-                applyFlyFeature();
-            }
-        }).observe(document, {
-            childList: true,
-            subtree: true,
+            // Hook into existing game loop for fly functionality
+            new MutationObserver(() => {
+                // Ensure that game and player$1 are loaded and hook fly functionality
+                if (typeof player$1 !== 'undefined') {
+                    // Fly logic executes as part of the game loop
+                    applyFlyFeature();
+                }
+            }).observe(document, {
+                childList: true,
+                subtree: true,
+            });
         });
-    });
+    }, 5000); // Delay of 5000 milliseconds (5 seconds)
 })();
