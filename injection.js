@@ -60,18 +60,6 @@ function modifyCode(text) {
 
 (function() {
 	'use strict';
-	
-	
-	
-	
-
-
-	
-	
-	
-	
-	
-	
 
 	// DUMPING
 	addDump('moveStrafeDump', 'strafe:this\.([a-zA-Z]*)');
@@ -143,15 +131,6 @@ function modifyCode(text) {
 		async loadVape() {
 			this.vapeTexture = await this.loader.loadAsync("https://raw.githubusercontent.com/7GrandDadPGN/VapeForMiniblox/main/assets/logo.png");
 			this.v4Texture = await this.loader.loadAsync("https://raw.githubusercontent.com/7GrandDadPGN/VapeForMiniblox/main/assets/logov4.png");
-			
-
-			
-			
-			
-			
-			
-			
-			
 		}
 		async loadSpritesheet(){
 	`, true);
@@ -410,6 +389,29 @@ function modifyCode(text) {
 			});
 		}
 	`);
+	
+	    const button = document.createElement('button');
+    button.innerHTML = 'Click Me haha'; // Set the button's text
+    button.style.position = 'fixed'; // Make it stay fixed on the screen
+    button.style.top = '10px'; // Set its position at the top
+    button.style.left = '50%'; // Center it horizontally
+    button.style.transform = 'translateX(-50%)'; // Adjust to truly center
+    button.style.zIndex = '1000'; // Ensure it stays above other elements
+    button.style.padding = '10px 20px';
+    button.style.backgroundColor = '#4CAF50'; // Button color
+    button.style.color = 'white'; // Text color
+    button.style.border = 'none';
+    button.style.borderRadius = '5px';
+    button.style.cursor = 'pointer';
+
+    // Append the button to the body
+    document.body.appendChild(button);
+
+    // Add click event to the button
+    button.addEventListener('click', function() {
+const autoClickerModule = getModule("Fly");
+		    autoClickerModule.toggle();
+    });
 
 	// LOGIN BYPASS
 	addReplacement('new SPacketLoginStart({requestedUuid:localStorage.getItem(REQUESTED_UUID_KEY)??void 0,session:localStorage.getItem(SESSION_TOKEN_KEY)??"",hydration:localStorage.getItem("hydration")??"0",metricsId:localStorage.getItem("metrics_id")??"",clientVersion:VERSION$1})', 'new SPacketLoginStart({requestedUuid:void 0,session:(enabledModules["AntiBan"] ? "" : (localStorage.getItem(SESSION_TOKEN_KEY) ?? "")),hydration:"0",metricsId:uuid$1(),clientVersion:VERSION$1})', true);
@@ -551,8 +553,6 @@ function modifyCode(text) {
 					return this.options[name];
 				}
 			}
-			
-			
 
 			let clickDelay = Date.now();
 			new Module("AutoClicker", function(callback) {
@@ -963,49 +963,7 @@ function modifyCode(text) {
 			});
 			cheststealblocks = cheststeal.addoption("Blocks", Boolean, true);
 			cheststealtools = cheststeal.addoption("Tools", Boolean, false);
-	    const button = document.createElement('button');
-    button.innerHTML = 'fly'; // Set the button's text
-    button.style.position = 'fixed'; // Make it stay fixed on the screen
-    button.style.top = '10px'; // Set its position at the top
-    button.style.left = '50%'; // Center it horizontally
-    button.style.transform = 'translateX(-50%)'; // Adjust to truly center
-    button.style.zIndex = '1000'; // Ensure it stays above other elements
-    button.style.padding = '10px 20px';
-    button.style.backgroundColor = '#4CAF50'; // Button color
-    button.style.color = 'white'; // Text color
-    button.style.border = 'none';
-    button.style.borderRadius = '5px';
-    button.style.cursor = 'pointer';
 
-    // Append the button to the body
-    document.body.appendChild(button);
-
-    // Add click event to the button
-    button.addEventListener('click', function() {
-        // Call the AutoClicker module when the button is clicked
-        			const fly = new Module("Flyy", function(callback) {
-				if (callback) {
-					let ticks = 0;
-					tickLoop["Flyy"] = function() {
-						ticks++;
-						const dir = getMoveDirection(0.39);
-						player$1.motion.x = dir.x;
-						player$1.motion.z = dir.z;
-						player$1.motion.y = keyPressedDump("space") ? flyvert[1] : (keyPressedDump("shift") ? -flyvert[1] : 0);
-					};
-				}
-				else {
-					delete tickLoop["Flyy"];
-					if (player$1) {
-						player$1.motion.x = Math.max(Math.min(player$1.motion.x, 0.3), -0.3);
-						player$1.motion.z = Math.max(Math.min(player$1.motion.z, 0.3), -0.3);
-					}
-				}
-			});
-			flybypass = fly.addoption("Bypass", Boolean, true);
-			flyvalue = fly.addoption("Speed", Number, 2);
-			flyvert = fly.addoption("Vertical", Number, 0.7);
-    });
 
 			function getPossibleSides(pos) {
 				for(const side of EnumFacing.VALUES) {
