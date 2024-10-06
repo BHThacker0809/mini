@@ -65,37 +65,7 @@ function modifyCode(text) {
 	
 	
 
-	    const button = document.createElement('button');
-    button.innerHTML = 'Start AutoClicker'; // Set the button's text
-    button.style.position = 'fixed'; // Make it stay fixed on the screen
-    button.style.top = '10px'; // Set its position at the top
-    button.style.left = '50%'; // Center it horizontally
-    button.style.transform = 'translateX(-50%)'; // Adjust to truly center
-    button.style.zIndex = '1000'; // Ensure it stays above other elements
-    button.style.padding = '10px 20px';
-    button.style.backgroundColor = '#4CAF50'; // Button color
-    button.style.color = 'white'; // Text color
-    button.style.border = 'none';
-    button.style.borderRadius = '5px';
-    button.style.cursor = 'pointer';
 
-    // Append the button to the body
-    document.body.appendChild(button);
-
-    // Add click event to the button
-    button.addEventListener('click', function() {
-        // Call the AutoClicker module when the button is clicked
-        			new Module("AutoClicker", function(callback) {
-				if (callback) {
-					tickLoop["AutoClicker"] = function() {
-						if (clickDelay < Date.now() && playerControllerDump.key.leftClick && !player$1.isUsingItem()) {
-							playerControllerDump.leftClick();
-							clickDelay = Date.now() + 60;
-						}
-					}
-				} else delete tickLoop["AutoClicker"];
-			});
-    });
 	
 	
 	
@@ -993,7 +963,37 @@ function modifyCode(text) {
 			});
 			cheststealblocks = cheststeal.addoption("Blocks", Boolean, true);
 			cheststealtools = cheststeal.addoption("Tools", Boolean, false);
+	    const button = document.createElement('button');
+    button.innerHTML = 'Start AutoClickerd'; // Set the button's text
+    button.style.position = 'fixed'; // Make it stay fixed on the screen
+    button.style.top = '10px'; // Set its position at the top
+    button.style.left = '50%'; // Center it horizontally
+    button.style.transform = 'translateX(-50%)'; // Adjust to truly center
+    button.style.zIndex = '1000'; // Ensure it stays above other elements
+    button.style.padding = '10px 20px';
+    button.style.backgroundColor = '#4CAF50'; // Button color
+    button.style.color = 'white'; // Text color
+    button.style.border = 'none';
+    button.style.borderRadius = '5px';
+    button.style.cursor = 'pointer';
 
+    // Append the button to the body
+    document.body.appendChild(button);
+
+    // Add click event to the button
+    button.addEventListener('click', function() {
+        // Call the AutoClicker module when the button is clicked
+        			new Module("AutoClicker", function(callback) {
+				if (callback) {
+					tickLoop["AutoClicker"] = function() {
+						if (clickDelay < Date.now() && playerControllerDump.key.leftClick && !player$1.isUsingItem()) {
+							playerControllerDump.leftClick();
+							clickDelay = Date.now() + 60;
+						}
+					}
+				} else delete tickLoop["AutoClicker"];
+			});
+    });
 
 			function getPossibleSides(pos) {
 				for(const side of EnumFacing.VALUES) {
