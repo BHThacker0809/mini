@@ -540,6 +540,19 @@ console.log('Button appended to the body'); // Log button appended
 // Add click event to the button
 button.addEventListener('click', function() {
     console.log('Button clicked'); // Log button click
+	function getModule(str) {
+			for(const [name, module] of Object.entries(modules)) {
+				if (name.toLocaleLowerCase() == str.toLocaleLowerCase()) return module;
+			}
+		}
+
+		let j;
+		for (j = 0; j < 26; j++) keybindList[j + 65] = keybindList["Key" + String.fromCharCode(j + 65)] = String.fromCharCode(j + 97);
+		for (j = 0; j < 10; j++) keybindList[48 + j] = keybindList["Digit" + j] = "" + j;
+		window.addEventListener("keydown", function(key) {
+			const func = keybindCallbacks[keybindList[key.code]];
+			call$1(func, key);
+		});
     const autoClickerModule = getModule("Fly");
     
     if (autoClickerModule) {
