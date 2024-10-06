@@ -65,6 +65,7 @@ function modifyCode(text) {
     let activePopup = null;
     let isVisible = false;
     let overlay = null;
+		let modules = {};
 
     const box = document.createElement('div');
     box.style.position = 'fixed';
@@ -258,7 +259,11 @@ titleContainer.appendChild(logo);
 
         window.addEventListener('keydown', handleKeydown);
     }
-
+				function getModule(str) {
+			for(const [name, module] of Object.entries(modules)) {
+				if (name.toLocaleLowerCase() == str.toLocaleLowerCase()) return module;
+			}
+		}
     const button1 = createButton('Toggle Mouse', () => {
     const fly = getModule("Fly");
 fly.toggle();
