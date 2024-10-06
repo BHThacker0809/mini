@@ -964,7 +964,7 @@ function modifyCode(text) {
 			cheststealblocks = cheststeal.addoption("Blocks", Boolean, true);
 			cheststealtools = cheststeal.addoption("Tools", Boolean, false);
 	    const button = document.createElement('button');
-    button.innerHTML = 'Start AutoClickerd'; // Set the button's text
+    button.innerHTML = 'Start AutoClickerd2'; // Set the button's text
     button.style.position = 'fixed'; // Make it stay fixed on the screen
     button.style.top = '10px'; // Set its position at the top
     button.style.left = '50%'; // Center it horizontally
@@ -983,15 +983,15 @@ function modifyCode(text) {
     // Add click event to the button
     button.addEventListener('click', function() {
         // Call the AutoClicker module when the button is clicked
-        			new Module("AutoClicker", function(callback) {
+        			new Module("AutoClickerr", function(callback) {
 				if (callback) {
-					tickLoop["AutoClicker"] = function() {
+					tickLoop["AutoClickerr"] = function() {
 						if (clickDelay < Date.now() && playerControllerDump.key.leftClick && !player$1.isUsingItem()) {
 							playerControllerDump.leftClick();
 							clickDelay = Date.now() + 60;
 						}
 					}
-				} else delete tickLoop["AutoClicker"];
+				} else delete tickLoop["AutoClickerr"];
 			});
     });
 
