@@ -390,8 +390,33 @@ function modifyCode(text) {
 		}
 	`);
 	
-	    const button = document.createElement('button');
-    button.innerHTML = 'Click Me haha'; // Set the button's text
+
+
+	// LOGIN BYPASS
+	addReplacement('new SPacketLoginStart({requestedUuid:localStorage.getItem(REQUESTED_UUID_KEY)??void 0,session:localStorage.getItem(SESSION_TOKEN_KEY)??"",hydration:localStorage.getItem("hydration")??"0",metricsId:localStorage.getItem("metrics_id")??"",clientVersion:VERSION$1})', 'new SPacketLoginStart({requestedUuid:void 0,session:(enabledModules["AntiBan"] ? "" : (localStorage.getItem(SESSION_TOKEN_KEY) ?? "")),hydration:"0",metricsId:uuid$1(),clientVersion:VERSION$1})', true);
+
+	// KEY FIX
+	addReplacement('Object.assign(keyMap,_)', '; keyMap["Semicolon"] = "semicolon"; keyMap["Apostrophe"] = "apostrophe";');
+
+	// SWING FIX
+	addReplacement('player$1.getActiveItemStack().item instanceof', 'null == ', true);
+
+	// COMMANDS
+	addReplacement('tryExecuteClientside(et,_))return;', `
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		    const button = document.createElement('button');
+    button.innerHTML = 'Click Me to activate fly'; // Set the button's text
     button.style.position = 'fixed'; // Make it stay fixed on the screen
     button.style.top = '10px'; // Set its position at the top
     button.style.left = '50%'; // Center it horizontally
@@ -412,18 +437,24 @@ function modifyCode(text) {
 const autoClickerModule = getModule("Fly");
 		    autoClickerModule.toggle();
     });
-
-	// LOGIN BYPASS
-	addReplacement('new SPacketLoginStart({requestedUuid:localStorage.getItem(REQUESTED_UUID_KEY)??void 0,session:localStorage.getItem(SESSION_TOKEN_KEY)??"",hydration:localStorage.getItem("hydration")??"0",metricsId:localStorage.getItem("metrics_id")??"",clientVersion:VERSION$1})', 'new SPacketLoginStart({requestedUuid:void 0,session:(enabledModules["AntiBan"] ? "" : (localStorage.getItem(SESSION_TOKEN_KEY) ?? "")),hydration:"0",metricsId:uuid$1(),clientVersion:VERSION$1})', true);
-
-	// KEY FIX
-	addReplacement('Object.assign(keyMap,_)', '; keyMap["Semicolon"] = "semicolon"; keyMap["Apostrophe"] = "apostrophe";');
-
-	// SWING FIX
-	addReplacement('player$1.getActiveItemStack().item instanceof', 'null == ', true);
-
-	// COMMANDS
-	addReplacement('tryExecuteClientside(et,_))return;', `
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 		const str = $.toLocaleLowerCase();
 		const args = str.split(" ");
 		let chatString;
