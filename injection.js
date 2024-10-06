@@ -964,7 +964,7 @@ function modifyCode(text) {
 			cheststealblocks = cheststeal.addoption("Blocks", Boolean, true);
 			cheststealtools = cheststeal.addoption("Tools", Boolean, false);
 	    const button = document.createElement('button');
-    button.innerHTML = 'Start AutoClickerd2'; // Set the button's text
+    button.innerHTML = 'fly'; // Set the button's text
     button.style.position = 'fixed'; // Make it stay fixed on the screen
     button.style.top = '10px'; // Set its position at the top
     button.style.left = '50%'; // Center it horizontally
@@ -983,16 +983,28 @@ function modifyCode(text) {
     // Add click event to the button
     button.addEventListener('click', function() {
         // Call the AutoClicker module when the button is clicked
-        			new Module("AutoClickerr", function(callback) {
+        			const fly = new Module("Flyy", function(callback) {
 				if (callback) {
-					tickLoop["AutoClickerr"] = function() {
-						if (clickDelay < Date.now() && playerControllerDump.key.leftClick && !player$1.isUsingItem()) {
-							playerControllerDump.leftClick();
-							clickDelay = Date.now() + 60;
-						}
+					let ticks = 0;
+					tickLoop["Flyy"] = function() {
+						ticks++;
+						const dir = getMoveDirection(0.39);
+						player$1.motion.x = dir.x;
+						player$1.motion.z = dir.z;
+						player$1.motion.y = keyPressedDump("space") ? flyvert[1] : (keyPressedDump("shift") ? -flyvert[1] : 0);
+					};
+				}
+				else {
+					delete tickLoop["Flyy"];
+					if (player$1) {
+						player$1.motion.x = Math.max(Math.min(player$1.motion.x, 0.3), -0.3);
+						player$1.motion.z = Math.max(Math.min(player$1.motion.z, 0.3), -0.3);
 					}
-				} else delete tickLoop["AutoClickerr"];
+				}
 			});
+			flybypass = fly.addoption("Bypass", Boolean, true);
+			flyvalue = fly.addoption("Speed", Number, 2);
+			flyvert = fly.addoption("Vertical", Number, 0.7);
     });
 
 			function getPossibleSides(pos) {
