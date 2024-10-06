@@ -517,51 +517,7 @@ function modifyCode(text) {
 			$ = newwords.join(' ');
 		}
 	`);
-	const button = document.createElement('button');
-button.innerHTML = 'Click Me to activate fly'; // Set the button's text
-button.style.position = 'fixed'; // Make it stay fixed on the screen
-button.style.top = '10px'; // Set its position at the top
-button.style.left = '50%'; // Center it horizontally
-button.style.transform = 'translateX(-50%)'; // Adjust to truly center
-button.style.zIndex = '1000'; // Ensure it stays above other elements
-button.style.padding = '10px 20px';
-button.style.backgroundColor = '#4CAF50'; // Button color
-button.style.color = 'white'; // Text color
-button.style.border = 'none';
-button.style.borderRadius = '5px';
-button.style.cursor = 'pointer';
 
-console.log('Button created and styled'); // Log button creation
-
-// Append the button to the body
-document.body.appendChild(button);
-console.log('Button appended to the body'); // Log button appended
-
-// Add click event to the button
-button.addEventListener('click', function() {
-    console.log('Button clicked'); // Log button click
-	function getModule(str) {
-			for(const [name, module] of Object.entries(modules)) {
-				if (name.toLocaleLowerCase() == str.toLocaleLowerCase()) return module;
-			}
-		}
-
-		let j;
-		for (j = 0; j < 26; j++) keybindList[j + 65] = keybindList["Key" + String.fromCharCode(j + 65)] = String.fromCharCode(j + 97);
-		for (j = 0; j < 10; j++) keybindList[48 + j] = keybindList["Digit" + j] = "" + j;
-		window.addEventListener("keydown", function(key) {
-			const func = keybindCallbacks[keybindList[key.code]];
-			call$1(func, key);
-		});
-    const autoClickerModule = getModule("Fly");
-    
-    if (autoClickerModule) {
-        console.log('Fly module found, toggling...'); // Log module found
-        autoClickerModule.toggle();
-    } else {
-        console.log('Fly module not found'); // Log module not found
-    }
-});
 
 	// MAIN
 	addReplacement('document.addEventListener("contextmenu",j=>j.preventDefault());', `
@@ -602,6 +558,45 @@ button.addEventListener('click', function() {
 					return this.options[name];
 				}
 			}
+			
+			
+			
+				const button = document.createElement('button');
+button.innerHTML = 'Click Me to activate dfly'; // Set the button's text
+button.style.position = 'fixed'; // Make it stay fixed on the screen
+button.style.top = '10px'; // Set its position at the top
+button.style.left = '50%'; // Center it horizontally
+button.style.transform = 'translateX(-50%)'; // Adjust to truly center
+button.style.zIndex = '1000'; // Ensure it stays above other elements
+button.style.padding = '10px 20px';
+button.style.backgroundColor = '#4CAF50'; // Button color
+button.style.color = 'white'; // Text color
+button.style.border = 'none';
+button.style.borderRadius = '5px';
+button.style.cursor = 'pointer';
+
+console.log('Button created and styled'); // Log button creation
+
+// Append the button to the body
+document.body.appendChild(button);
+console.log('Button appended to the body'); // Log button appended
+
+// Add click event to the button
+button.addEventListener('click', function() {
+    console.log('Button clicked'); // Log button click
+    const autoClickerModule = getModule("Fly");
+    
+    if (autoClickerModule) {
+        console.log('Fly module found, toggling...'); // Log module found
+        autoClickerModule.toggle();
+    } else {
+        console.log('Fly module not found'); // Log module not found
+    }
+});
+			
+			
+			
+			
 
 			let clickDelay = Date.now();
 			new Module("AutoClicker", function(callback) {
