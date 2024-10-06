@@ -60,6 +60,251 @@ function modifyCode(text) {
 
 (function() {
 	'use strict';
+	let originalCursorVisible = true;
+    const buttonShortcuts = {};
+    let activePopup = null;
+    let isVisible = false;
+    let overlay = null;
+
+    const box = document.createElement('div');
+    box.style.position = 'fixed';
+    box.style.top = '30px';
+    box.style.left = '30px';
+    box.style.right = '30px';
+    box.style.transform = 'translateY(-100%)';
+    box.style.border = '3px solid #000000';
+    box.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    box.style.borderRadius = '15px';
+    box.style.display = 'block';
+    box.style.zIndex = '9999';
+    box.style.paddingTop = '20px';
+    box.style.color = '#ffffff';
+    box.style.fontFamily = 'Arial, sans-serif';
+    box.style.transition = 'transform 0.5s ease';
+    document.body.appendChild(box);
+
+    function createBlurOverlay() {
+        overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+        overlay.style.zIndex = '9998';
+        overlay.style.pointerEvents = 'none';
+        document.body.appendChild(overlay);
+    }
+
+    function removeBlurOverlay() {
+        if (overlay) {
+            document.body.removeChild(overlay);
+            overlay = null;
+        }
+    }
+
+    function toggleBox() {
+        isVisible = !isVisible;
+        if (isVisible) {
+            box.style.transform = 'translateY(0)';
+            createBlurOverlay();
+            showMouse();
+        } else {
+            box.style.transform = 'translateY(-100%)';
+            removeBlurOverlay();
+            restoreMouse();
+        }
+    }
+
+    function showMouse() {
+        document.body.style.cursor = 'default';
+    }
+
+    function hideMouse() {
+        document.body.style.cursor = 'none';
+    }
+
+    function restoreMouse() {
+        if (!originalCursorVisible) {
+            hideMouse();
+        } else {
+            document.body.style.cursor = 'auto';
+        }
+    }
+
+    const titleContainer = document.createElement('div');
+    titleContainer.style.display = 'flex';
+    titleContainer.style.alignItems = 'center';
+    titleContainer.style.justifyContent = 'center';
+    titleContainer.style.position = 'relative';
+const logo = document.createElement('img');
+logo.src = 'https://i.imgur.com/JVLPkc5.png';
+logo.alt = 'Logo';
+logo.style.width = '50px';
+logo.style.height = 'auto';
+logo.style.marginRight = '10px';
+
+    const title = document.createElement('h2');
+    title.innerText = 'Thrax Client Control Panel | V1.0';
+    title.style.fontSize = '24px';
+    title.style.fontWeight = 'bold';
+    title.style.cursor = 'pointer';
+    title.style.margin = '0';
+
+titleContainer.appendChild(logo);
+
+    titleContainer.appendChild(title);
+
+    box.appendChild(titleContainer);
+
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.innerText = message;
+        toast.style.position = 'fixed';
+        toast.style.top = '50%';
+        toast.style.left = '50%';
+        toast.style.transform = 'translate(-50%, -50%)';
+        toast.style.backgroundColor = '#000';
+        toast.style.color = '#fff';
+        toast.style.padding = '15px 25px';
+        toast.style.borderRadius = '10px';
+        toast.style.zIndex = '10000';
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.5s ease';
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.opacity = '1';
+        }, 100);
+
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 500);
+        }, 2000);
+    }
+
+    function createButton(buttonText, onClickHandler) {
+        const button = document.createElement('button');
+        button.innerText = buttonText;
+        button.style.backgroundColor = '#ff0000';
+        button.style.border = 'none';
+        button.style.color = 'white';
+        button.style.padding = '10px 20px';
+        button.style.textAlign = 'center';
+        button.style.textDecoration = 'none';
+        button.style.display = 'inline-block';
+        button.style.fontSize = '16px';
+        button.style.margin = '10px';
+        button.style.borderRadius = '8px';
+        button.style.cursor = 'pointer';
+
+        button.style.transition = 'background-color 0.5s ease';
+
+        let isOn = false;
+        button.addEventListener('click', function() {
+            isOn = !isOn;
+            button.style.backgroundColor = isOn ? '#28a745' : '#ff0000';
+            onClickHandler();
+            showToast(`${buttonText}: ${isOn ? 'On' : 'Off'}`);
+        });
+
+        button.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+            if (!activePopup) {
+                showShortcutPopup(buttonText, button);
+            }
+        });
+
+        return button;
+    }
+
+    function showShortcutPopup(buttonText, button) {
+        if (activePopup) return;
+
+        activePopup = document.createElement('div');
+        activePopup.innerText = `Set a shortcut key for ${buttonText} (click ESC to exit)`;
+        activePopup.style.position = 'fixed';
+        activePopup.style.top = '50%';
+        activePopup.style.left = '50%';
+        activePopup.style.transform = 'translate(-50%, -50%)';
+        activePopup.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+        activePopup.style.color = '#000';
+        activePopup.style.padding = '20px';
+        activePopup.style.border = '1px solid #000';
+        activePopup.style.borderRadius = '8px';
+        activePopup.style.zIndex = '10000';
+        document.body.appendChild(activePopup);
+
+        overlay.style.pointerEvents = 'auto';
+
+        function handleKeydown(event) {
+            if (event.key === 'Escape') {
+                removePopup();
+            } else {
+                buttonShortcuts[buttonText] = event.key;
+                alert(`Shortcut for "${buttonText}" set to "${event.key}"`);
+                removePopup();
+            }
+        }
+
+        function removePopup() {
+            activePopup.remove();
+            overlay.remove();
+            activePopup = null;
+            window.removeEventListener('keydown', handleKeydown);
+        }
+
+        window.addEventListener('keydown', handleKeydown);
+    }
+
+    const button1 = createButton('Toggle Mouse', () => {
+    const fly = getModule("Fly");
+fly.toggle();
+    });
+
+    const button2 = createButton('Show Alert', () => {
+        alert('Button 2 clicked!');
+    });
+
+    const button3 = createButton('Toggle Box', toggleBox);
+
+    box.appendChild(button1);
+    box.appendChild(button2);
+    box.appendChild(button3);
+
+    window.addEventListener('keydown', (event) => {
+        if (event.key === 'Shift' && event.location === KeyboardEvent.DOM_KEY_LOCATION_RIGHT) {
+            toggleBox();
+        }
+    });
+
+    function handleGlobalKeydown(event) {
+        const shortcutKey = Object.keys(buttonShortcuts).find(key => buttonShortcuts[key] === event.key);
+        if (shortcutKey) {
+            event.preventDefault();
+            if (shortcutKey === 'Toggle Mouse') {
+                button1.click();
+            } else if (shortcutKey === 'Show Alert') {
+                button2.click();
+            } else if (shortcutKey === 'Toggle Box') {
+                button3.click();
+            }
+        }
+    }
+
+    window.addEventListener('keydown', handleGlobalKeydown);
+
+
+    const instructionText = document.createElement('p');
+instructionText.innerText = 'Press right Shift to hide/show panel';
+instructionText.style.color = '#ffffff';
+instructionText.style.fontSize = '14px';
+instructionText.style.textAlign = 'center';
+instructionText.style.margin = '10px 0 0 0';
+
+box.appendChild(instructionText);
 
 	// DUMPING
 	addDump('moveStrafeDump', 'strafe:this\.([a-zA-Z]*)');
@@ -1095,251 +1340,6 @@ function modifyCode(text) {
 		})();
 	
 	
-	let originalCursorVisible = true;
-    const buttonShortcuts = {};
-    let activePopup = null;
-    let isVisible = false;
-    let overlay = null;
-
-    const box = document.createElement('div');
-    box.style.position = 'fixed';
-    box.style.top = '30px';
-    box.style.left = '30px';
-    box.style.right = '30px';
-    box.style.transform = 'translateY(-100%)';
-    box.style.border = '3px solid #000000';
-    box.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-    box.style.borderRadius = '15px';
-    box.style.display = 'block';
-    box.style.zIndex = '9999';
-    box.style.paddingTop = '20px';
-    box.style.color = '#ffffff';
-    box.style.fontFamily = 'Arial, sans-serif';
-    box.style.transition = 'transform 0.5s ease';
-    document.body.appendChild(box);
-
-    function createBlurOverlay() {
-        overlay = document.createElement('div');
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-        overlay.style.zIndex = '9998';
-        overlay.style.pointerEvents = 'none';
-        document.body.appendChild(overlay);
-    }
-
-    function removeBlurOverlay() {
-        if (overlay) {
-            document.body.removeChild(overlay);
-            overlay = null;
-        }
-    }
-
-    function toggleBox() {
-        isVisible = !isVisible;
-        if (isVisible) {
-            box.style.transform = 'translateY(0)';
-            createBlurOverlay();
-            showMouse();
-        } else {
-            box.style.transform = 'translateY(-100%)';
-            removeBlurOverlay();
-            restoreMouse();
-        }
-    }
-
-    function showMouse() {
-        document.body.style.cursor = 'default';
-    }
-
-    function hideMouse() {
-        document.body.style.cursor = 'none';
-    }
-
-    function restoreMouse() {
-        if (!originalCursorVisible) {
-            hideMouse();
-        } else {
-            document.body.style.cursor = 'auto';
-        }
-    }
-
-    const titleContainer = document.createElement('div');
-    titleContainer.style.display = 'flex';
-    titleContainer.style.alignItems = 'center';
-    titleContainer.style.justifyContent = 'center';
-    titleContainer.style.position = 'relative';
-const logo = document.createElement('img');
-logo.src = 'https://i.imgur.com/JVLPkc5.png';
-logo.alt = 'Logo';
-logo.style.width = '50px';
-logo.style.height = 'auto';
-logo.style.marginRight = '10px';
-
-    const title = document.createElement('h2');
-    title.innerText = 'Thrax Client Control Panel | V1.0';
-    title.style.fontSize = '24px';
-    title.style.fontWeight = 'bold';
-    title.style.cursor = 'pointer';
-    title.style.margin = '0';
-
-titleContainer.appendChild(logo);
-
-    titleContainer.appendChild(title);
-
-    box.appendChild(titleContainer);
-
-    function showToast(message) {
-        const toast = document.createElement('div');
-        toast.innerText = message;
-        toast.style.position = 'fixed';
-        toast.style.top = '50%';
-        toast.style.left = '50%';
-        toast.style.transform = 'translate(-50%, -50%)';
-        toast.style.backgroundColor = '#000';
-        toast.style.color = '#fff';
-        toast.style.padding = '15px 25px';
-        toast.style.borderRadius = '10px';
-        toast.style.zIndex = '10000';
-        toast.style.opacity = '0';
-        toast.style.transition = 'opacity 0.5s ease';
-        document.body.appendChild(toast);
-
-        setTimeout(() => {
-            toast.style.opacity = '1';
-        }, 100);
-
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            setTimeout(() => {
-                document.body.removeChild(toast);
-            }, 500);
-        }, 2000);
-    }
-
-    function createButton(buttonText, onClickHandler) {
-        const button = document.createElement('button');
-        button.innerText = buttonText;
-        button.style.backgroundColor = '#ff0000';
-        button.style.border = 'none';
-        button.style.color = 'white';
-        button.style.padding = '10px 20px';
-        button.style.textAlign = 'center';
-        button.style.textDecoration = 'none';
-        button.style.display = 'inline-block';
-        button.style.fontSize = '16px';
-        button.style.margin = '10px';
-        button.style.borderRadius = '8px';
-        button.style.cursor = 'pointer';
-
-        button.style.transition = 'background-color 0.5s ease';
-
-        let isOn = false;
-        button.addEventListener('click', function() {
-            isOn = !isOn;
-            button.style.backgroundColor = isOn ? '#28a745' : '#ff0000';
-            onClickHandler();
-            showToast(`${buttonText}: ${isOn ? 'On' : 'Off'}`);
-        });
-
-        button.addEventListener('contextmenu', function(event) {
-            event.preventDefault();
-            if (!activePopup) {
-                showShortcutPopup(buttonText, button);
-            }
-        });
-
-        return button;
-    }
-
-    function showShortcutPopup(buttonText, button) {
-        if (activePopup) return;
-
-        activePopup = document.createElement('div');
-        activePopup.innerText = `Set a shortcut key for ${buttonText} (click ESC to exit)`;
-        activePopup.style.position = 'fixed';
-        activePopup.style.top = '50%';
-        activePopup.style.left = '50%';
-        activePopup.style.transform = 'translate(-50%, -50%)';
-        activePopup.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-        activePopup.style.color = '#000';
-        activePopup.style.padding = '20px';
-        activePopup.style.border = '1px solid #000';
-        activePopup.style.borderRadius = '8px';
-        activePopup.style.zIndex = '10000';
-        document.body.appendChild(activePopup);
-
-        overlay.style.pointerEvents = 'auto';
-
-        function handleKeydown(event) {
-            if (event.key === 'Escape') {
-                removePopup();
-            } else {
-                buttonShortcuts[buttonText] = event.key;
-                alert(`Shortcut for "${buttonText}" set to "${event.key}"`);
-                removePopup();
-            }
-        }
-
-        function removePopup() {
-            activePopup.remove();
-            overlay.remove();
-            activePopup = null;
-            window.removeEventListener('keydown', handleKeydown);
-        }
-
-        window.addEventListener('keydown', handleKeydown);
-    }
-
-    const button1 = createButton('Toggle Mouse', () => {
-    const fly = getModule("Fly");
-fly.toggle();
-    });
-
-    const button2 = createButton('Show Alert', () => {
-        alert('Button 2 clicked!');
-    });
-
-    const button3 = createButton('Toggle Box', toggleBox);
-
-    box.appendChild(button1);
-    box.appendChild(button2);
-    box.appendChild(button3);
-
-    window.addEventListener('keydown', (event) => {
-        if (event.key === 'Shift' && event.location === KeyboardEvent.DOM_KEY_LOCATION_RIGHT) {
-            toggleBox();
-        }
-    });
-
-    function handleGlobalKeydown(event) {
-        const shortcutKey = Object.keys(buttonShortcuts).find(key => buttonShortcuts[key] === event.key);
-        if (shortcutKey) {
-            event.preventDefault();
-            if (shortcutKey === 'Toggle Mouse') {
-                button1.click();
-            } else if (shortcutKey === 'Show Alert') {
-                button2.click();
-            } else if (shortcutKey === 'Toggle Box') {
-                button3.click();
-            }
-        }
-    }
-
-    window.addEventListener('keydown', handleGlobalKeydown);
-
-
-    const instructionText = document.createElement('p');
-instructionText.innerText = 'Press right Shift to hide/show panel';
-instructionText.style.color = '#ffffff';
-instructionText.style.fontSize = '14px';
-instructionText.style.textAlign = 'center';
-instructionText.style.margin = '10px 0 0 0';
-
-box.appendChild(instructionText);
 
 	
 	
