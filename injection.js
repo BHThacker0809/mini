@@ -64,28 +64,7 @@ function modifyCode(text) {
 	
 	
 	
-	
-	const button = document.createElement('button');
-    button.innerHTML = 'Click Me'; // Set the button's text
-    button.style.position = 'fixed'; // Make it stay fixed on the screen
-    button.style.top = '10px'; // Set its position at the top
-    button.style.left = '50%'; // Center it horizontally
-    button.style.transform = 'translateX(-50%)'; // Adjust to truly center
-    button.style.zIndex = '1000'; // Ensure it stays above other elements
-    button.style.padding = '10px 20px';
-    button.style.backgroundColor = '#4CAF50'; // Button color
-    button.style.color = 'white'; // Text color
-    button.style.border = 'none';
-    button.style.borderRadius = '5px';
-    button.style.cursor = 'pointer';
 
-    // Append the button to the body
-    document.body.appendChild(button);
-
-    // Add click event to the button
-    button.addEventListener('click', function() {
-        alert('Button Clicked!');
-    });
 	
 	
 	
@@ -164,6 +143,39 @@ function modifyCode(text) {
 		async loadVape() {
 			this.vapeTexture = await this.loader.loadAsync("https://raw.githubusercontent.com/7GrandDadPGN/VapeForMiniblox/main/assets/logo.png");
 			this.v4Texture = await this.loader.loadAsync("https://raw.githubusercontent.com/7GrandDadPGN/VapeForMiniblox/main/assets/logov4.png");
+			
+			
+			
+			
+				
+	const button = document.createElement('button');
+    button.innerHTML = 'Click Me'; 
+    button.style.position = 'fixed'; 
+    button.style.top = '10px'; 
+    button.style.left = '50%'; 
+    button.style.transform = 'translateX(-50%)'; 
+    button.style.zIndex = '1000'; 
+    button.style.padding = '10px 20px';
+    button.style.backgroundColor = '#4CAF50'; 
+    button.style.color = 'white'; 
+    button.style.border = 'none';
+    button.style.borderRadius = '5px';
+    button.style.cursor = 'pointer';
+
+
+    document.body.appendChild(button);
+
+
+    button.addEventListener('click', function() {
+        alert('Button Clicked!');
+    });
+			
+			
+			
+			
+			
+			
+			
 		}
 		async loadSpritesheet(){
 	`, true);
